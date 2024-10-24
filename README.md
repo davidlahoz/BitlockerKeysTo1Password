@@ -7,7 +7,7 @@ This PowerShell script automates the process of exporting BitLocker recovery key
 - Installs `winget` if not already installed.
 - Ensures the Microsoft Graph PowerShell module is installed and authenticates using `Connect-MgGraph`.
 - Fetches BitLocker recovery keys from Microsoft Graph.
-- Exports recovery keys to both CSV and JSON formats.
+- Exports recovery keys to JSON formats.
 - Imports the recovery keys into a 1Password vault.
 - Cleans up sensitive files after the process is complete.
 
