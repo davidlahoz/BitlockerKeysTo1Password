@@ -22,13 +22,6 @@ Log-Message "Script started."
 # Invoke 1password cli login
 Invoke-Expression $(op signin)
 
-# Check and install winget if not installed
-if (-Not (Get-Command winget -ErrorAction SilentlyContinue)) {
-    Write-Host "winget is not installed. Installing winget..."
-    Log-Message "winget is not installed. Installing winget..."
-    Start-Process -FilePath "powershell" -ArgumentList "Invoke-WebRequest -Uri 'https://aka.ms/get-winget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'; Add-AppxPackage .\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -Wait
-}
-
 # Ensure Microsoft Graph module is installed
 if (-Not (Get-Module -ListAvailable -Name Microsoft.Graph)) {
     Write-Host "Installing Microsoft Graph module..."
