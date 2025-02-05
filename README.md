@@ -5,7 +5,7 @@ This repository contains two PowerShell scripts to fetch Bitlocker recovery keys
 ## Important note
 The script has been tested on a device using the desktop client and is not intended to be executed unattended. To simplify login to 1Password, enable the 1Password CLI integration.
 Thereof make sure you have 1Password CLI integration enabled
-![1Password settings](Readme-Files/1PasswordCLIInt.png)
+![1Password settings](readme-files/1PasswordCLIInt.png)
 
 
 However it migth work if you login via Terminal beforehand, but it has not been tested.
