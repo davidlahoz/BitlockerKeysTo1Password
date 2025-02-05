@@ -1,50 +1,89 @@
-# BitLocker Key Export and Import Script
+# Bitlocker Recovery Keys to 1Password
 
-This PowerShell script automates the process of exporting BitLocker recovery keys from Microsoft Graph API, formatting them into JSON, and importing them into 1Password. The script also logs the execution process and ensures the security of data by cleaning up files after completion.
+This repository contains two PowerShell scripts to fetch Bitlocker recovery keys from Microsoft Graph and import them into 1Password. The scripts are designed for both **Windows** and **macOS**.
 
-## Features
-- Logs all script operations in a daily log file.
-- Installs `winget` if not already installed.
-- Ensures the Microsoft Graph PowerShell module is installed and authenticates using `Connect-MgGraph`.
-- Fetches BitLocker recovery keys from Microsoft Graph.
-- Exports recovery keys to JSON formats.
-- Imports the recovery keys into a 1Password vault.
-- Cleans up sensitive files after the process is complete.
-
-## Prerequisites
-- [1Password CLI (`op`)](https://developer.1password.com/docs/cli/get-started/) must be installed and configured.
-- Access to Microsoft Graph API with `Device.Read.All` and `InformationProtectionPolicy.Read` permissions.
-- Microsoft Graph PowerShell module.
-- `winget` (automatically installed if missing).
-- Proper API permissions to fetch BitLocker keys.
-
-- **1Password Item and Vault**:
-   - The script requires a pre-existing item in 1Password with the name `#BitlockerSample`. This item is used as a template for creating new entries. Ensure this item exists before running the script.
-   - The BitLocker keys will be imported into a vault named `BitlockerKeys` in 1Password. This vault will be automatically created.
+## Important note
+The script has been tested on a device using the desktop client and is not intended to be executed unattended. To simplify login to 1Password, enable the 1Password CLI integration.
+Thereof make sure you have 1Password CLI integration enabled
+![1Password settings](Readme-Files/1PasswordCLIInt.png)
 
 
-## How It Works
+However it migth work if you login via Terminal beforehand, but it has not been tested.
+```sh
+ op account add --address <yourcompany>.1password.eu/com --email <your.email@domain.com> \
+  --secret-key <xxxxxxxxxxx> --signin
+  ```
 
-1. **Logging**: 
-   - A log folder is created (if it doesn't exist) and all log entries are written to a daily log file.
 
-2. **Environment Setup**:
-   - The script checks if `winget` is installed and installs it if missing.
-   - It ensures the Microsoft Graph module is installed and authenticated with the necessary permissions.
 
-3. **Fetching BitLocker Recovery Keys**:
-   - The script retrieves BitLocker keys from Microsoft Graph API and exports them to a CSV file.
-   - The CSV is converted into a JSON format with properties renamed for import into 1Password.
+## Scripts
+- **WIN_BitlockerTo1Password.ps1** → Windows version
+- **OSX_BitlockerTo1Password.ps1** → macOS version
 
-4. **Importing into 1Password**:
-   - Each BitLocker key is imported into a 1Password vault, with a progress bar showing the import status.
+## Requirements
+### Windows
+- **PowerShell 7+** (Required for compatibility with modern modules)
+- **Microsoft Graph PowerShell Module**
+  ```powershell
+  Install-Module -Name Microsoft.Graph -Force -Scope CurrentUser
+  ```
+- **1Password CLI (op)**
+  - Download and install: [1Password CLI](https://developer.1password.com/docs/cli/get-started/)
+- **Bitlocker Recovery Key Permissions**
+  - The script requires `Device.Read.All` and `InformationProtectionPolicy.Read` permissions in Microsoft Graph.
 
-5. **Cleanup**:
-   - After successful import, the CSV and JSON files are deleted for security reasons.
+### macOS
+- **PowerShell (pwsh) 7+**
+  - Install via Homebrew:
+    ```sh
+    brew install --cask powershell
+    ```
+- **Microsoft Graph PowerShell Module**
+  ```powershell
+  Install-Module -Name Microsoft.Graph -Force -Scope CurrentUser
+  ```
+- **1Password CLI (op)**
+  - Download and install: [1Password CLI](https://developer.1password.com/docs/cli/get-started/)
+- **Bitlocker Recovery Key Permissions**
+  - The script requires `Device.Read.All` and `InformationProtectionPolicy.Read` permissions in Microsoft Graph.
 
-## Script Execution
-
-1. Clone this repository and open the PowerShell script.
+## Usage
+### Windows
+1. Open PowerShell as Administrator.
 2. Run the script:
    ```powershell
-   .\BitlockerTo1Password.ps1
+   ./WIN_BitlockerTo1Password.ps1
+   ```
+
+### macOS
+1. Open a terminal and launch PowerShell:
+   ```sh
+   pwsh
+   ```
+2. Navigate to the script directory.
+3. Run the script:
+   ```powershell
+   ./OSX_BitlockerTo1Password.ps1
+   ```
+
+## What the Script Does
+1. **Authenticates to Microsoft Graph** to fetch Bitlocker recovery keys.
+2. **Exports keys to a CSV file**.
+3. **Converts the CSV to JSON** format.
+4. **Imports the keys into 1Password** under a specified vault.
+5. **Removes the temporary files** (CSV and JSON) for security reasons.
+
+## Troubleshooting
+- **Authentication Issues:** Ensure you have the correct Microsoft Graph permissions assigned.
+- **1Password CLI Errors:** Verify that `op` is installed and correctly configured.
+- **Permission Denied Errors:** Run the script with appropriate privileges (`Administrator` on Windows, correct permissions on macOS).
+
+Technically, if you use the CLI command to log in, it should work, but this has not been tested.
+
+## Security Notice
+The script handles sensitive data (Bitlocker keys). Ensure that:
+- You **run the script in a secure environment**.
+- The temporary files (`bitlockerkeys.csv` and `bitlockerkeys.json`) are **not manually stored** after execution.
+
+## License
+This script is provided under the [MIT License](LICENSE). Use at your own risk.
