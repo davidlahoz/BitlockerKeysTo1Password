@@ -8,9 +8,9 @@ Thereof make sure you have 1Password CLI integration enabled
 ![1Password settings](readme-files/1PasswordCLIInt.png)
 
 
-However it migth work if you login via Terminal beforehand, but it has not been tested.
+However it might work if you login via Terminal beforehand, but it has not been tested.
 ```sh
- op account add --address <yourcompany>.1password.eu/com --email <your.email@domain.com> \
+ op account add --address <yourcompany.1password.eu/com> --email <your.email@domain.com> \
   --secret-key <xxxxxxxxxxx> --signin
   ```
 
